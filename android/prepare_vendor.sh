@@ -125,6 +125,8 @@ if [ "$1" == "dtb-only" ]; then
       "${TECHPACK_DT}" \
       "${BASE_DT}"/dtbs
   exit 0
+else
+  TARGET_PRODUCT=${TARGET_PRODUCT:-"$1"}
 fi
 
 ################################################################################
@@ -147,8 +149,11 @@ if [ -z "${ANDROID_KERNEL_OUT}" ]; then
     echo "TARGET_BOARD_PLATFORM is not set. Have you run lunch yet?" 1>&2
     exit 1
   fi
-
-  ANDROID_KERNEL_OUT=${ANDROID_BUILD_TOP}/device/qcom/${TARGET_BOARD_PLATFORM}-kernel
+  if (grep -w -q "${TARGET_PRODUCT}" <<<"${T2M_CUSTO_PRODUCTS}") && [ -n "$T2M_CUSTO_PRODUCTS" ]; then
+    ANDROID_KERNEL_OUT=${ANDROID_BUILD_TOP}/device/fairphone/${TARGET_PRODUCT}-kernel
+  else
+    ANDROID_KERNEL_OUT=${ANDROID_BUILD_TOP}/device/qcom/${TARGET_BOARD_PLATFORM}-kernel
+  fi
 fi
 fi
 if [ ! -e ${ANDROID_KERNEL_OUT} ]; then
@@ -568,6 +573,7 @@ if [ -n "${ANDROID_PRODUCT_OUT}" ] && [ -n "${ANDROID_BUILD_TOP}" ]; then
     set -x
     OUT_DIR=${ANDROID_EXT_MODULES_OUT} \
     KERNEL_KIT=${ANDROID_KERNEL_OUT} \
+    TARGET_BOARD_PLATFORM=${TARGET_PRODUCT} \
     ./build/build_module.sh
     set +x
   )
@@ -591,6 +597,7 @@ if [ -n "${ANDROID_PRODUCT_OUT}" ] && [ -n "${ANDROID_BUILD_TOP}" ]; then
       OUT_DIR=${ANDROID_EXT_MODULES_OUT} \
       EXT_MODULES="${KP_TO_ANDROID}/${project}" \
       KERNEL_KIT=${ANDROID_KERNEL_OUT} \
+      TARGET_BOARD_PLATFORM=${TARGET_PRODUCT} \
       ./build/build_module.sh dtbs
       set +x
     )
