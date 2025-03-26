@@ -320,6 +320,7 @@ if [ "${RECOMPILE_ABL}" == "1" ] && [ -n "${TARGET_BUILD_VARIANT}" ] && \
       cd "${ROOT_DIR}"
 
       ./tools/bazel run \
+        --"//bootable/bootloader/edk2:build_id=${BUILD_ID}" \
         --"//bootable/bootloader/edk2:target_build_variant=${TARGET_BUILD_VARIANT}" \
         "//msm-kernel:${KERNEL_TARGET}_${KERNEL_VARIANT}_abl_dist" \
         -- --destdir "${ANDROID_KP_OUT_DIR}/dist"
