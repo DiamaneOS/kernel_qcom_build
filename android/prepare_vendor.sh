@@ -302,8 +302,8 @@ if [ ! -e "${ANDROID_ABL_OUT_DIR}/abl-${TARGET_BUILD_VARIANT}/${ABL_IMAGE}" ] ||
   COPY_ABL_NEEDED=1
 fi
 
-if [ ! -e "${ANDROID_KP_OUT_DIR}/dist/${DIST_ABL_IMAGE}" ] && \
-   [ "${COPY_ABL_NEEDED}" == "1" ]; then
+#if [ ! -e "${ANDROID_KP_OUT_DIR}/dist/${DIST_ABL_IMAGE}" ] && \
+if  [ "${COPY_ABL_NEEDED}" == "1" ]; then
   RECOMPILE_ABL=1
 fi
 
